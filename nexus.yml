@@ -13,7 +13,7 @@
         dest: /opt
     - name: Untar nexus
       unarchive:
-        src: /opt/latest-unix.tar.gz
+        src: /opt/nexus-3.22.0-02-unix.tar.gz
         dest: /opt/latest-nexus
     - name: add group
       group:
@@ -33,6 +33,12 @@
       with_items:
         - /opt/nexus
         - /opt/sonatype-work
+    - name: set nexus.rc file
+      copy:
+        src: nexus.rc
+        dest: /opt/nexus/bin/nexus.rc
+        owner: nexus
+        group: nexus
 
       
     
