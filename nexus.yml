@@ -1,4 +1,6 @@
 - hosts: localhost
+  vars:
+      ansible_python_interpreter: /usr/bin/python3
   tasks:
     - name: remove binary
       command: "apt-get update -y"
@@ -6,7 +8,6 @@
       apt:
         name: openjdk-8-jdk
         state: present
-        update_cache: yes
     - name: download nexus
       get_url:
         url: http://download.sonatype.com/nexus/3/nexus-3.22.0-02-unix.tar.gz
@@ -39,6 +40,21 @@
         dest: /opt/nexus/bin/nexus.rc
         owner: nexus
         group: nexus
+    - name: copy nexus vm options
+      copy:
+        src: nexus.vmoptions
+        dest: /opt/nexus/bin/nexus.vmoptions
+        owner: nexus
+        group: nexus
+    - name: setup service file
+      copy:
+        src: nexus.service
+        dest: /etc/systemd/system/nexus.service
+    - name: start service
+      service:
+        name: nexus
+        state: started
+        enabled: yes
 
       
     
