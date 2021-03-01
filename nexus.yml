@@ -1,10 +1,38 @@
 - hosts: localhost
   tasks:
+    - name: remove binary
+      command: "apt-get update -y"
     - name: Download and Install packages
       apt:
         name: openjdk-8-jdk
         state: present
+        update_cache: yes
     - name: download nexus
       get_url:
         url: http://download.sonatype.com/nexus/3/nexus-3.22.0-02-unix.tar.gz
         dest: /opt
+    - name: Untar nexus
+      unarchive:
+        src: /opt/latest-unix.tar.gz
+        dest: /opt/latest-nexus
+    - name: add group
+      group:
+        name: nexus
+        state: present
+    - name: add user 
+      user:
+        name: nexus
+        password: "{{ nexus | password_hash('sha512') }}"
+        state: present
+    - name: permission setup
+      file:
+        dest: "{{ item }}"
+        owner: nexus
+        group: nexus
+        recurse: yes
+      with_items:
+        - /opt/nexus
+        - /opt/sonatype-work
+
+      
+    
