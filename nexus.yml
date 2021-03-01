@@ -1,0 +1,10 @@
+- hosts: localhost
+  tasks:
+    - name: Download and Install packages
+      apt:
+        name: openjdk-8-jdk
+        state: present
+    - name: download nexus
+      get_url:
+        url: http://download.sonatype.com/nexus/3/nexus-3.22.0-02-unix.tar.gz
+        dest: /opt
