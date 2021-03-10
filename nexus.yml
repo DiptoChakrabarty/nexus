@@ -47,14 +47,16 @@
         dest: /opt/nexus-3.22.0-02/bin/nexus.vmoptions
         owner: nexus
         group: nexus
+    
     - name: open port
-      ansible.posix.firewalld:
-        zone: public
-        port: 8081/tcp
+      community.general.ufw:
         state: enabled
-        permanent: yes
+        port: 8081
+        rule: allow
+        proto: tcp
+        
       vars:
-        ansible_python_interpreter: /usr/bin/python
+        ansible_python_interpreter: '/usr/bin/python3'
     - name: setup service file
       copy:
         src: nexus.service
