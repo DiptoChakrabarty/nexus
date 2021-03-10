@@ -1,3 +1,5 @@
 nexus-3.22.0-02-unix.tar.gz
 sonatype-work
 nexus-3.22.0-02
+
+Cannot open local storage '/opt/sonatype-work/nexus3/db/config'

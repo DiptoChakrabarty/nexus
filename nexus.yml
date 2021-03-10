@@ -1,6 +1,6 @@
 - hosts: localhost
   vars:
-      ansible_python_interpreter: /home/chuck/Desktop/Projects/nexus/venv/bin/python3
+      ansible_python_interpreter: /usr/bin/python
       nexus: nexus
   tasks:
     - name: remove binary
@@ -9,7 +9,6 @@
       apt:
         name: openjdk-8-jdk
         state: present
-        update_cache: yes
     - name: download nexus
       get_url:
         url: http://download.sonatype.com/nexus/3/nexus-3.22.0-02-unix.tar.gz
@@ -48,6 +47,14 @@
         dest: /opt/nexus-3.22.0-02/bin/nexus.vmoptions
         owner: nexus
         group: nexus
+    - name: open port
+      ansible.posix.firewalld:
+        zone: public
+        port: 8081/tcp
+        state: enabled
+        permanent: yes
+      vars:
+        ansible_python_interpreter: /usr/bin/python
     - name: setup service file
       copy:
         src: nexus.service
